@@ -1,0 +1,34 @@
+
+python deploy/python/det_keypoint_unite_infer.py --det_model_dir="E:\pingpong_train_data\models\picodet_v2_s_320_pedestrian" --keypoint_model_dir="E:\pingpong_train_data\models\tinypose_128x96" --image_dir="E:\pingpong_train_data\dataset\train\JPEGImages" --device=GPU --output_dir="E:\pingpong_train_data\ooutput" 
+
+python tools/infer.py -c configs/picodet/ppq.yml --infer_dir="E:\pingpong_train_data\train_part1\game_2\frames" -o weights="E:\pingpong_train_data\PaddleDetection\output\ppq\best_model.pdopt" --output_dir="E:\pingpong_train_data\ppq_output"
+# 单张图片预测乒乓球
+python tools/infer.py -c configs/picodet/ppq.yml --infer_img="E:\pingpong_train_data\codes\frames\frames_00036.png" -o weights="E:\pingpong_train_data\PaddleDetection\output\ppq\best_model.pdopt" --output_dir="E:\pingpong_train_data\codes\ppq_frames"
+# 多张图片预测乒乓球
+python tools/infer.py -c configs/picodet/ppq.yml --infer_dir="E:\pingpong_train_data\codes\frames" -o weights="E:\pingpong_train_data\PaddleDetection\output\ppq\best_model.pdopt" --output_dir="E:\pingpong_train_data\codes\ppq_frames"
+# 检测人体
+python deploy/python/det_keypoint_unite_infer.py --det_model_dir="E:\pingpong_train_data\models\picodet_v2_s_320_pedestrian" --keypoint_model_dir="E:\pingpong_train_data\models\tinypose_128x96" --image_dir="E:\pingpong_train_data\codes\frames" --device=GPU --output_dir="E:\pingpong_train_data\codes\body_frames"
+
+
+
+python tools/infer.py -c configs/picodet/ppq.yml --infer_dir="E:\pingpong_train_data\codes\test" --output_dir="E:\pingpong_train_data\codes\test\inference_results"
+
+
+python tools/infer.py -c configs/picodet/ppq.yml --infer_dir="E:\pingpong_train_data\codes\test" -o weights="E:\pingpong_train_data\PaddleDetection\output\ppq\best_model.pdopt" --output_dir="E:\pingpong_train_data\codes\ppq_output"
+python deploy/python/det_keypoint_unite_infer.py --det_model_dir="E:\pingpong_train_data\models\picodet_v2_s_320_pedestrian" --keypoint_model_dir="E:\pingpong_train_data\models\tinypose_128x96" --image_dir="E:\pingpong_train_data\codes\ppq_output" --device=GPU --output_dir="E:\pingpong_train_data\codes\final_output"
+
+截取视频下面这个好用
+ffmpeg -ss 00:00:38 -to 00:00:48 -accurate_seek -i video.mp4 -codec copy -avoid_negative_ts 1 -y source_video.mp4
+拆分成帧
+ffmpeg -i source_video.mp4 E:\pingpong_train_data\my_data_collection\origin_frames\frames_%05d.png
+ffmpeg -i source_video.mp4 -r 30 E:\pingpong_train_data\codes\frames\frames_%05d.png
+高质量
+ffmpeg -i source_video.mp4 -qscale:v 2 E:\pingpong_train_data\codes\frames\frames_%05d.png
+亮度和对比度及伽马值
+ffmpeg -i source_video.mp4 -vf "eq=brightness=-0.2:contrast=2.0:gamma=1.5" E:\pingpong_train_data\codes\frames\frames_%05d.png
+ffmpeg -i source_video.mp4 -vf "eq=contrast=1.5:gamma=1" E:\pingpong_train_data\codes\frames\frames_%05d.png
+隔行扫描
+ffmpeg -i source_video.mp4 -vf "yadif" E:\pingpong_train_data\codes\frames\frames_%05d.png
+
+python E:\pingpong_train_data\PaddleDetection\tools\infer.py -c E:\pingpong_train_data\PaddleDetection\configs\picodet\ppq.yml --infer_dir="E:\pingpong_train_data\my_data_collection\origin_frames" -o weights="E:\pingpong_train_data\PaddleDetection\output\ppq\best_model.pdopt" --output_dir="E:\pingpong_train_data\my_data_collection\ppq_frames"
+python E:\pingpong_train_data\PaddleDetection\deploy\python\det_keypoint_unite_infer.py --det_model_dir="E:\pingpong_train_data\models\picodet_v2_s_320_pedestrian" --keypoint_model_dir="E:\pingpong_train_data\models\tinypose_128x96" --image_dir="E:\pingpong_train_data\my_data_collection\ppq_frames" --device=GPU --output_dir="E:\pingpong_train_data\my_data_collection\body_frames"
