@@ -6,7 +6,7 @@ import json
 def create_video_with_trajectory(
     image_folder,
     annotation_path,
-    output_path='output_trajectory.mp4',
+    output_path='output_trajectory.mp4', # 需要根据实际调整
     fps=30
 ):
     # 定义球台边界坐标

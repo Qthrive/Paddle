@@ -6,7 +6,7 @@ def multi_game_images_to_video(image_root, output_folder, fps=30):
     # 创建输出目录
     os.makedirs(output_folder, exist_ok=True)
     
-    # 遍历所有游戏目录
+    # 遍历所有场次目录
     for game_dir in os.listdir(image_root):
         game_match = re.match(r"game_(\d+)", game_dir)
         if not game_match:
@@ -15,7 +15,7 @@ def multi_game_images_to_video(image_root, output_folder, fps=30):
         game_id = int(game_match.group(1))
         game_path = os.path.join(image_root, game_dir, "frames")
         
-        # 收集当前游戏的所有帧
+        # 收集当前场次的所有帧
         images = []
         for filename in os.listdir(game_path):
             frame_match = re.match(r"frame_(\d+)\.png", filename)
@@ -53,5 +53,5 @@ def create_video(image_dir, output_video, images, fps):
 multi_game_images_to_video(
     image_root=r"E:\pingpong_train_data\train_part1",
     output_folder=r"E:\pingpong_train_data\game_videos",
-    fps=25  # 推荐使用25或30帧率
+    fps=25  # 25或30帧率
 )

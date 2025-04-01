@@ -6,11 +6,11 @@ def multi_game_images_to_video(image_folder, output_folder, fps=30):
     # 创建输出目录
     os.makedirs(output_folder, exist_ok=True)
     
-    # 获取所有图片并按游戏场次分组
+    # 获取所有图片并按场次分组
     game_dict = {}
     for filename in os.listdir(image_folder):
         if filename.endswith(".jpg"):
-            # 提取游戏场次和帧序号
+            # 提取场次和帧序号
             match = re.match(r"game_(\d+)_frame_(\d+)_vis\.jpg", filename)
             if not match:
                 continue
